@@ -16,6 +16,7 @@ A team collaboration and task management REST API built using **FastAPI, Postgre
 - SQLAlchemy model relationships
 - Nested API responses
 - Automated API testing using Pytest
+- Docker and Docker Compose support
 
 ## Tech Stack
 
@@ -28,6 +29,8 @@ A team collaboration and task management REST API built using **FastAPI, Postgre
 - JWT (PyJWT)
 - Argon2
 - Pytest
+- Docker
+- Docker Compose
 
 ## Project Structure
 
@@ -46,12 +49,15 @@ TEAMSPACE/
 │   └── security.py
 ├── tests/
 │   └── test_main.py
+├── .dockerignore
 ├── .gitignore
+├── Dockerfile
+├── docker-compose.yml
 ├── requirements.txt
 └── README.md
 ```
 
-## Installation and Setup
+## Installation and Setup (Local)
 
 ### 1. Clone the repository
 
@@ -95,12 +101,57 @@ Replace the database credentials and secret with your own local values.
 uvicorn app.main:app --reload
 ```
 
+## Run with Docker
+
+### Prerequisites
+
+- Docker Desktop installed and running
+- Docker Compose available
+
+### 1. Configure environment variables
+
+Create a `.env` file in the project root:
+
+```env
+SECRET_KEY=your_strong_random_secret
+```
+
+### 2. Build and start containers
+
+```bash
+docker compose up --build -d
+```
+
+This starts the FastAPI application and PostgreSQL database together.
+
+### 3. Access the application
+
+- API: http://localhost:8000
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+### 4. Stop the containers
+
+```bash
+docker compose down
+```
+
+To remove containers and the PostgreSQL data volume:
+
+```bash
+docker compose down -v
+```
+
+**Warning:** The `-v` option permanently deletes the PostgreSQL data stored in the Docker volume.
+
+**Note:** The database credentials in the current Docker Compose configuration are for local development only. Replace them with secure environment-based credentials before production deployment.
+
 ## API Documentation
 
-After starting the server, open:
+After starting the application, access:
 
-- Swagger UI: http://127.0.0.1:8000/docs
-- ReDoc: http://127.0.0.1:8000/redoc
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
 
 ## Automated Testing
 
@@ -114,7 +165,7 @@ Current test result: **11 tests passed**.
 
 ## Authentication
 
-The API uses JWT Bearer tokens.
+The API uses JWT Bearer token authentication.
 
 1. Register a user.
 2. Log in to receive an access token.
@@ -123,7 +174,7 @@ The API uses JWT Bearer tokens.
 
 ## Future Improvements
 
-- Docker and Docker Compose
 - Cloud deployment
 - Additional automated test coverage
 - Production-ready database migrations
+- Improved production security and configuration
